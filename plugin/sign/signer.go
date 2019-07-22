@@ -136,13 +136,13 @@ func (s *Signer) resign() error {
 	return resign(rd, now, s.last)
 }
 
-// resign will scan rd and check the signature on the SOA record. If that
-// record has only 2 weeks left this function will return true and the zone
-// needs to be resigned. If the SOA isn't found in the first 100 records it
-// will return false. If the last time we've signed this zone has been more the
-// 6 days ago is also return true.
+// resign will scan rd and check the signature on the SOA record. if last is not
+// Zero it will be used to chck if we need to resign (DurationResignDays time has elapsed).
+// If we fallthrough that check, it will check the remaining time on the SOA's RRSIG(s).
+// When that signature has only 2 weeks left this we will also resign.
+// If the SOA isn't found in the first 100 records, we will resign the zone.
 func resign(rd io.Reader, now, last time.Time) error {
-	if now.Sub(last) >= DurationResignDays {
+	if !last.IsZero() && now.Sub(last) >= DurationResignDays {
 		return fmt.Errorf("resign was: %s ago", DurationResignDays)
 	}
 
