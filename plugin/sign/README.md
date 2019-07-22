@@ -67,8 +67,8 @@ sign DBFILE [ZONES...] {
    `db.<name>.signed`. If the path is relative the path from the *root* directive will be prepended
    to it.
 
-Keys can be generated with dnssec-keygen, to create one for use in the *sign* plugin, use:
-`dnssec-keygen -a ECDSAP256SHA256 -f KSK example.org`.
+Keys can be generated with `coredns-keygen`, to create one for use in the *sign* plugin, use:
+`coredns-keygen example.org` or `dnssec-keygen -a ECDSAP256SHA256 -f KSK example.org`.
 
 ## Examples
 
@@ -91,13 +91,13 @@ Running this leads to the following log output (note the timers in this example 
 shorter intervals).
 
 ~~~ txt
-2019-07-20T15:29:08.707Z [WARNING] plugin/file: Failed to open "open db.example.org.signed: no such file or directory": trying again in 1m0s
-2019-07-20T15:29:08.719Z [INFO] plugin/sign: Signing "example.org." because open db.example.org.signed: no such file or directory
-2019-07-20T15:29:08.719Z [INFO] plugin/sign: Signed "example.org." with key tags "59725" in 11.670985ms, saved in "db.example.org.signed". Next: 2019-07-20T15:49:06.560Z
-2019-07-20T15:30:08.711Z [INFO] plugin/file: Successfully reloaded zone "example.org." in "db.example.org.signed" with serial 1563636548
-2019-07-20T15:49:08.709Z [INFO] plugin/sign: Signing "example.org." because resign was: 10m0s ago
-2019-07-20T15:49:08.709Z [INFO] plugin/sign: Signed "example.org." with key tags "59725" in 2.055895ms, saved in "db.example.org.signed". Next: 2019-07-20T16:09:06.560Z
-2019-07-20T15:50:08.708Z [INFO] plugin/file: Successfully reloaded zone "example.org." in "db.example.org.signed" with serial 1563637748
+plugin/file: Failed to open "open db.example.org.signed: no such file or directory": trying again in 1m0s
+plugin/sign: Signing "example.org." because open db.example.org.signed: no such file or directory
+plugin/sign: Signed "example.org." with key tags "59725" in 11.670985ms, saved in "db.example.org.signed". Next: 2019-07-20T15:49:06.560Z
+plugin/file: Successfully reloaded zone "example.org." in "db.example.org.signed" with serial 1563636548
+plugin/sign: Signing "example.org." because resign was: 10m0s ago
+plugin/sign: Signed "example.org." with key tags "59725" in 2.055895ms, saved in "db.example.org.signed". Next: 2019-07-20T16:09:06.560Z
+plugin/file: Successfully reloaded zone "example.org." in "db.example.org.signed" with serial 1563637748
 ~~~
 
 Or use a single zone file for *multiple* zones, note that the **ZONES** are repeated for both plugins.
@@ -145,6 +145,8 @@ you have specified the origins `example.org` and `example.net` in the server blo
 The DNSSEC RFCs: RFC 4033, RFC 4034 and RFC 4035. And the BCP on DNSSEC, RFC 6781. Further more the
 manual pages coredns-keygen(1) and dnssec-keygen(8). And the *file* plugin's documentation.
 
+Coredns-keygen can be found at https://github.com/coredns-utils in the coredns-keygen directory.
+
 ## Bugs
 
-`keys directory` is not implemented, nor is coredns-keygen(1). Glue records are currently signed.
+`keys directory` is not implemented. Glue records are currently signed.
