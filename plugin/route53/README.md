@@ -86,3 +86,23 @@ Enable route53 with multiple hosted zones with the same domain:
     route53 example.org.:Z1Z2Z3Z4DZ5Z6Z7 example.org.:Z93A52145678156
 }
 ~~~
+
+## IAM Policy
+
+route53 needs two permissions to function: `route53:ListHostedZonesByName` and `route53:ListResourceRecordSets`. A minimal IAM Policy might look like:
+
+~~~ json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "route53:ListHostedZonesByName",
+        "route53:ListResourceRecordSets"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+~~~
